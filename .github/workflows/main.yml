@@ -92,3 +92,5 @@ jobs:
           github_token: ${{ secrets.GH_TOKEN }}
           publish_dir: ./public  # Deploy the prepared report and data
           force_orphan: true  # Create a new commit every time
+
+
