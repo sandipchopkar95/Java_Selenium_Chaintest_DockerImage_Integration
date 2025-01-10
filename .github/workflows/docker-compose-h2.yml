@@ -1,11 +1,13 @@
-version: '3'
+version: '3.8'
 services:
   chaintest:
     image: anshooarora/chaintest:latest
     container_name: chaintest
     environment:
-      - "SPRING_PROFILES_ACTIVE=h2"
-      - SPRING_DATASOURCE_URL=jdbc:h2:file:./data/db
-      - SPRING_DATASOURCE_DRIVERCLASSNAME=org.h2.Driver
+      SPRING_PROFILES_ACTIVE: h2
+      SPRING_DATASOURCE_URL: jdbc:h2:file:/data/db
+      SPRING_DATASOURCE_DRIVERCLASSNAME: org.h2.Driver
     ports:
-      - 85:85
+      - "85:85"
+    volumes:
+      - ./data:/data
