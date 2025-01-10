@@ -8,5 +8,5 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:h2:file:./data/db
       - SPRING_DATASOURCE_DRIVERCLASSNAME=org.h2.Driver
     ports:
-#      - 81:81
-      - "8080:80"
+      - 80:80
+#      - "8080:80"
