@@ -28,8 +28,7 @@ jobs:
 
       # Step 4: Verify ChainTest service is running
       - name: Verify ChainTest is Running
-        run: |
-          curl --fail http://localhost:85/ || exit 1
+        run: curl --fail http://localhost:85/ || exit 1
         env:
           SPRING_PROFILES_ACTIVE: h2
           SPRING_DATASOURCE_URL: jdbc:h2:file:./data/db
@@ -112,7 +111,8 @@ jobs:
           cp -R target/chaintest/* public/
           mv public/Index.html public/index.html  # Ensure index.html for GitHub Pages
 
-        # Step 4: Deploy reports to GitHub Pages
+      # Step 4: Deploy reports to GitHub Pages
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_TOKEN }}
