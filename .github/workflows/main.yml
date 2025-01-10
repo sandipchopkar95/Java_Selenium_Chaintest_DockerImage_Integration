@@ -28,7 +28,7 @@ jobs:
 
       # Step 4: Verify ChainTest service is running
       - name: Verify ChainTest is Running
-        run: curl --fail http://localhost:85/ || exit 1
+        run: curl --fail http://localhost:80/ || exit 1
         env:
           SPRING_PROFILES_ACTIVE: h2
           SPRING_DATASOURCE_URL: jdbc:h2:file:./data/db
