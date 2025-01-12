@@ -24,15 +24,11 @@ jobs:
       - name: Start Docker Services
         run: |
           docker compose -f .github/workflows/docker-compose-h2.yml up -d
-          sleep 15  # Wait for the ChainTest service to start completely
+          sleep 15  # Wait for the service to initialize
 
       # Step 4: Verify ChainTest service is running
-      - name: Verify ChainTest is Running
+      - name: Verify ChainTest Service is Running
         run: curl --fail http://localhost:80/ || exit 1
-        env:
-          SPRING_PROFILES_ACTIVE: h2
-          SPRING_DATASOURCE_URL: jdbc:h2:file:./data/db
-          SPRING_DATASOURCE_DRIVERCLASSNAME: org.h2.Driver
 
       # Step 5: Set up Java (Temurin 17)
       - name: Set up Java
@@ -42,7 +38,7 @@ jobs:
           distribution: 'temurin'
 
       # Step 6: Cache Maven packages for faster builds
-      - name: Cache Maven Packages
+      - name: Cache Maven Dependencies
         uses: actions/cache@v4
         with:
           path: ~/.m2
@@ -54,32 +50,29 @@ jobs:
       - name: Install Dependencies
         run: mvn install -DskipTests
 
-      # Step 8: Set up Xvfb (if GUI applications like Selenium require it)
+      # Step 8: Set up Xvfb (for GUI-based tests, e.g., Selenium)
       - name: Set up Xvfb
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb
-          Xvfb :99 &  # Start Xvfb on display :99
-          export DISPLAY=:99  # Set DISPLAY variable for GUI apps
+          Xvfb :99 &
+          export DISPLAY=:99
 
-      # Step 9: Run Selenium tests
+      # Step 9: Run Selenium Tests
       - name: Run Selenium Tests
-        run: |
-          export DISPLAY=:99  # Ensure DISPLAY is set
-          mvn test
+        run: mvn test
         env:
-          DISPLAY: :99  # Ensure the same environment variable is available
+          DISPLAY: :99
 
-      # Step 10: Archive test reports
+      # Step 10: Archive Test Reports
       - name: Archive Test Reports
         uses: actions/upload-artifact@v4
-        if: ${{ always() }}  # Run this step even if tests fail
         with:
           name: Reports
-          path: target/chaintest/  # Archive the entire chaintest directory
+          path: target/chaintest/  # Adjust this path if your reports are elsewhere
           retention-days: 7
 
-      # Step 11: Stop Docker services
+      # Step 11: Stop Docker Services
       - name: Stop Docker Services
         if: always()
         run: docker compose -f .github/workflows/docker-compose-h2.yml down
@@ -87,7 +80,7 @@ jobs:
   deploy-pages:
     name: Deploy Reports to GitHub Pages
     runs-on: ubuntu-latest
-    if: ${{ always() }}  # Ensure this step runs even if tests fail
+    if: ${{ always() }}  # Runs even if previous job fails
     needs: run-tests
     permissions:
       contents: write
@@ -104,14 +97,14 @@ jobs:
           name: Reports
           path: ./target/chaintest
 
-      # Step 3: Prepare reports for deployment
-      - name: Prepare Report for Deployment
+      # Step 3: Prepare Reports for Deployment
+      - name: Prepare Reports
         run: |
           mkdir -p public
           cp -R target/chaintest/* public/
-          mv public/Index.html public/index.html  # Ensure index.html for GitHub Pages
+          mv public/Index.html public/index.html
 
-      # Step 4: Deploy reports to GitHub Pages
+      # Step 4: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
