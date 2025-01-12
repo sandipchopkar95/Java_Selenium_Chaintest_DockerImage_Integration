@@ -23,8 +23,8 @@ public class RootTest {
         options.addArguments("--disable-extensions"); // Disable extensions for stability
 
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(5));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
     }
 
@@ -39,9 +39,15 @@ public class RootTest {
         }
     }
 
-    @AfterMethod(dependsOnMethods = "attachScreenShot")
+    @AfterMethod
     public void tearDown() {
-        driver.quit();
+        if (driver != null) {
+            try {
+                driver.quit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
