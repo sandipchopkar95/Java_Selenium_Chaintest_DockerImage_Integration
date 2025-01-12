@@ -4,6 +4,7 @@ import com.aventstack.chaintest.plugins.ChainTestListener;
 import com.aventstack.chaintest.service.ChainPluginService;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -16,7 +17,12 @@ public class RootTest {
 
     @BeforeMethod
     public void setUp() {
-        driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless"); // Enable headless mode
+        options.addArguments("--disable-gpu"); // Disable GPU to avoid rendering issues
+        options.addArguments("--disable-extensions"); // Disable extensions for stability
+
+        driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(5));
         driver.manage().window().maximize();
