@@ -15,7 +15,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <logback.version>1.5.9</logback.version>
-        <chaintest.version>1.0.3</chaintest.version>
+        <chaintest.version>1.0.4</chaintest.version>
     </properties>
     <dependencies>
         <dependency>
@@ -27,6 +27,11 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.10.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.27.0</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
